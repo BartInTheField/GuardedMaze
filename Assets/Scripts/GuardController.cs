@@ -25,13 +25,11 @@ public class GuardController : MonoBehaviour
         
         if (IsOnPosition(destinationPosition))
         {
-            Debug.Log("Destination");
             Move(originalPosition);
         }
 
         if (IsOnPosition(originalPosition))
         {
-            Debug.Log("Original");
             Move(destinationPosition);
         }
     }

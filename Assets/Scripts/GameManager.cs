@@ -1,16 +1,25 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public event Action OnGameOver;
+
     [SerializeField] private LayerMask movementMask;
     [SerializeField] private PlayerController playerController;
-    private Camera camera;
+    private new Camera camera;
 
     private void Start()
     {
+        playerController.OnHitByEnemy += EnemyHit;
         camera = Camera.main;
+    }
+
+    private void EnemyHit()
+    {
+        OnGameOver?.Invoke();
     }
 
     private void Update()
