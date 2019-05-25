@@ -8,6 +8,8 @@ using UnityEngine.AI;
 public class PlayerController : MonoBehaviour
 {
     public event Action OnHitByEnemy;
+    public event Action OnHitFinish;
+
     private NavMeshAgent agent;
     private GameManager gameManager;
 
@@ -17,6 +19,7 @@ public class PlayerController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         gameManager.OnGameOver += GameOver;
+        gameManager.OnGameFinish += GameFinish;
     }
 
     public void Move(Vector3 point)
@@ -24,16 +27,26 @@ public class PlayerController : MonoBehaviour
         agent.SetDestination(point);
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        GameObject otherGameObject = other.gameObject;
+        if (otherGameObject.CompareTag("Enemy"))
         {
             OnHitByEnemy?.Invoke();
+        }
+
+        if (otherGameObject.CompareTag("Finish"))
+        {
+            OnHitFinish?.Invoke();
         }
     }
 
     private void GameOver()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void GameFinish()
     {
         gameObject.SetActive(false);
     }

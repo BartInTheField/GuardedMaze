@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using Object = System.Object;
 
 public class GameManager : MonoBehaviour
 {
     public event Action OnGameOver;
+    public event Action OnGameFinish;
 
     [SerializeField] private LayerMask movementMask;
     [SerializeField] private PlayerController playerController;
@@ -13,11 +16,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        playerController.OnHitByEnemy += EnemyHit;
+        playerController.OnHitByEnemy += GameOver;
+        playerController.OnHitFinish += GameFinish;
         camera = Camera.main;
     }
 
-    private void EnemyHit()
+    private void GameFinish()
+    {
+        OnGameFinish?.Invoke();
+    }
+
+    private void GameOver()
     {
         OnGameOver?.Invoke();
     }
